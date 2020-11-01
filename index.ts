@@ -111,13 +111,13 @@
       } else {
         alert("GAME OVER");
         document.location.reload();
-        clearInterval(interval); // Needed for Chrome to end game
       }
     }
 
     x += dx;
     y += dy;
+    requestAnimationFrame(draw);
   };
 
-  var interval = setInterval(draw, 10);
+  draw();
 })();
