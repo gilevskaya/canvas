@@ -95,6 +95,8 @@
       dy = -dy;
     }
 
+    let isGameOver = false;
+
     if (rightPressed) {
       paddleX += 7;
       if (paddleX + paddleWidth > canvas.width) {
@@ -108,16 +110,17 @@
     } else if (y + dy > canvas.height - ballRadius) {
       if (x > paddleX && x < paddleX + paddleWidth) {
         dy = -dy;
-      } else {
-        alert("GAME OVER");
-        document.location.reload();
-      }
+      } else isGameOver = true;
     }
 
-    x += dx;
-    y += dy;
-    requestAnimationFrame(draw);
+    if (isGameOver) {
+      alert("GAME OVER");
+      document.location.reload();
+    } else {
+      x += dx;
+      y += dy;
+      requestAnimationFrame(draw);
+    }
   };
-
   draw();
 })();
