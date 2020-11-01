@@ -2,14 +2,13 @@
 
 <html>
   <head>
-    <title>Canvas Ricochet</title>
+    <title>Breakout</title>
   </head>
 
   <style>
     body {
       margin: 10px;
       background-color: lightgray;
-      text-align: center;
     }
     * {
       box-sizing: border-box;
@@ -19,6 +18,7 @@
     }
     .ratio {
       display: grid;
+      /* container */
       position: relative;
       margin-bottom: 20px;
     }
@@ -28,13 +28,13 @@
   </style>
 
   <body>
-    <div id="container" class="ratio">
+    <div class="ratio">
       <svg viewBox="0 0 16 9"></svg>
       <div style="border: 2px dashed darkgrey; position: absolute; z-index: 10">
         <canvas id="game"> no canvas </canvas>
       </div>
     </div>
 
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="breakout.html"></script>
   </body>
 </html>
