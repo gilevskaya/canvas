@@ -36,6 +36,16 @@
     },
     false
   );
+  document.addEventListener(
+    "mousemove",
+    (e) => {
+      var relativeX = e.clientX - canvas.offsetLeft;
+      if (relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth / 2;
+      }
+    },
+    false
+  );
 
   let x = canvas.width / 2;
   let y = canvas.height - 30;
@@ -63,18 +73,18 @@
   };
 
   const draw = () => {
-    // DEBUG: borders, h&w
-    // ctx.beginPath();
-    // ctx.rect(0, 0, canvas.width, canvas.height);
-    // ctx.stroke();
-    // ctx.closePath();
-
-    // ctx.fillStyle = "black";
-    // ctx.font = "15px Arial";
-    // ctx.fillText(`w: ${canvas.width}`, 20, 30);
-    // ctx.fillText(`h: ${canvas.height}`, 20, 50);
-    // end of DEBUG
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // DEBUG: borders, h&w
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.stroke();
+    ctx.closePath();
+
+    ctx.fillStyle = "black";
+    ctx.font = "15px Arial";
+    ctx.fillText(`w: ${canvas.width}`, 20, 30);
+    ctx.fillText(`h: ${canvas.height}`, 20, 50);
+    // end of DEBUG
     drawBall();
     drawPaddle();
 
