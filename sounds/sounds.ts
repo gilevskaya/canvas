@@ -35,15 +35,6 @@
     myAudio.play();
   }
 
-  // TODO: ...
-  // const numsInput = document.getElementById("nums");
-  // const numsButton = document.getElementById("nums-voice");
-
-  // numsButton.addEventListener("click", () => {
-  //   // playDigit(5);
-  //   console.log("bbbbb");
-  // });
-
   const buttons = document.getElementsByTagName("button");
   for (var i = 0; i < buttons.length; i++) {
     buttons[i].addEventListener(

@@ -27,13 +27,6 @@
         stopTime = stop;
         myAudio.play();
     }
-    // TODO: ...
-    // const numsInput = document.getElementById("nums");
-    // const numsButton = document.getElementById("nums-voice");
-    // numsButton.addEventListener("click", () => {
-    //   // playDigit(5);
-    //   console.log("bbbbb");
-    // });
     var buttons = document.getElementsByTagName("button");
     for (var i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener("click", function () {
