@@ -21,6 +21,9 @@
       button.removeEventListener(evt.type, startAnimation, false);
       button.addEventListener("click", stopAnimation, false);
       timer = setInterval(drawAnimation, 17);
+      document
+        .querySelector("canvas")
+        .addEventListener("click", playerClick, false);
       drawAnimation();
     }
 
@@ -47,9 +50,25 @@
         gl.drawingBufferHeight,
       ];
       // Random velocity between 1.0 and 7.0
-      velocity = 1.0 + 6.0 * Math.random();
+      velocity = 1.0 + 4.0 * Math.random();
       color = [Math.random(), Math.random(), Math.random()];
       gl.clearColor(color[0], color[1], color[2], 1.0);
+    }
+  }
+
+  function playerClick(evt) {
+    const [x, y] = [
+      evt.pageX - evt.target.offsetLeft,
+      gl.drawingBufferHeight - (evt.pageY - evt.target.offsetTop),
+    ];
+    var diffPos = [x - position[0], y - position[1]];
+    if (
+      diffPos[0] >= 0 &&
+      diffPos[0] < size[0] &&
+      diffPos[1] >= 0 &&
+      diffPos[1] < size[1]
+    ) {
+      gl.clearColor(0.0, 0.0, 0.0, 1.0);
     }
   }
 
