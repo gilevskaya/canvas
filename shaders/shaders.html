@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shaders</title>
+    <script type="text/javascript" src="shaders.js"></script>
+  </head>
+
+  <style>
+    body {
+      margin: 10px;
+      background-color: lightgray;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    p {
+      font-family: sans-serif;
+    }
+  </style>
+
+  <body>
+    <div style="display: flex; justify-content: center">
+      <canvas
+        id="webgl-canvas"
+        height="300"
+        width="600"
+        style="border: 2px dashed darkgrey; margin-bottom: 10px"
+      >
+        no canvas
+      </canvas>
+    </div>
+
+    <script type="x-shader/x-vertex" id="vertex-shader">
+      #version 100
+      void main() {
+        gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+        gl_PointSize = 64.0;
+      }
+    </script>
+    <script type="x-shader/x-fragment" id="fragment-shader">
+      #version 100
+      void main() {
+        gl_FragColor = vec4(0.18, 0.54, 0.34, 1.0);
+      }
+    </script>
+  </body>
+</html>
