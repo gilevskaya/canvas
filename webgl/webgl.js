@@ -20,13 +20,20 @@
         }
         // Call stopAnimation() once to setup the initial event
         // handlers for canvas and button.
-        stopAnimation({ type: "click" });
+        startAnimation({ type: "click" });
         var gl;
         function drawAnimation() {
             if (!gl) {
                 var canvas = document.getElementById("webgl-canvas");
+                console.log("*", canvas.clientWidth, canvas.clientHeight);
+                // canvas.width = canvas.clientWidth;
+                // canvas.height = canvas.clientHeight;
                 gl = canvas.getContext("webgl");
                 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                // Enable scissoring operation and define the position and
+                // size of the scissoring area.
+                gl.enable(gl.SCISSOR_TEST);
+                gl.scissor(40, 20, 40, 280);
             }
             var color = [Math.random(), Math.random(), Math.random()];
             // Set the clear color to darkish green.
