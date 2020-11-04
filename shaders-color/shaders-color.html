@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shaders</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
+      integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <script type="text/javascript" src="shaders-color.js"></script>
+  </head>
+
+  <style>
+    body {
+      margin: 10px;
+      background-color: lightgray;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    p {
+      font-family: sans-serif;
+    }
+  </style>
+
+  <body>
+    <div style="display: flex; justify-content: center">
+      <canvas
+        id="webgl-canvas"
+        width="640"
+        height="480"
+        style="border: 2px dashed darkgrey; margin-bottom: 10px"
+      >
+        no canvas
+      </canvas>
+    </div>
+  </body>
+</html>
