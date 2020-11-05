@@ -226,7 +226,7 @@ function initShaderProgram(gl, sourceVertex, sourceFragment) {
   gl.deleteShader(vertexShader);
   gl.deleteShader(fragmentShader);
   if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-    var linkErrLog = gl.getProgramInfoLog(shaderProgram);
+    const linkErrLog = gl.getProgramInfoLog(shaderProgram);
     cleanup(gl, shaderProgram);
     console.error(linkErrLog);
     return;
