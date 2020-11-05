@@ -37,18 +37,9 @@ function setupWebGL(evt) {
   const gl = canvas.getContext("webgl2");
   if (!gl) return;
 
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-  // gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-  gl.clearColor(1.0, 1.0, 1.0, 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
   const program = createProgram(gl, vertexSource, fragmentSource);
-  gl.useProgram(program);
 
-  const colorLocation = gl.getUniformLocation(program, "u_color");
-
+  const colorUniformLocation = gl.getUniformLocation(program, "u_color");
   const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
   const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -57,22 +48,28 @@ function setupWebGL(evt) {
   gl.bindVertexArray(vao);
   gl.enableVertexAttribArray(positionAttributeLocation);
 
-  const size = 2; // 2 components per iteration
-  const type = gl.FLOAT; // the data is 32bit floats
-  const normalize = false; // don't normalize the data
-  const stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
-  const offset = 0; // start at the beginning of the buffer
-  gl.vertexAttribPointer(
-    positionAttributeLocation,
-    size,
-    type,
-    normalize,
-    stride,
-    offset
-  );
-  gl.bindVertexArray(vao);
-
   {
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.useProgram(program);
+
+    const size = 2; // 2 components per iteration
+    const type = gl.FLOAT; // the data is 32bit floats
+    const normalize = false; // don't normalize the data
+    const stride = 0; // 0 = move forward size * sizeof(type) each iteration to get the next position
+    const offset = 0; // start at the beginning of the buffer
+    gl.vertexAttribPointer(
+      positionAttributeLocation,
+      size,
+      type,
+      normalize,
+      stride,
+      offset
+    );
+    gl.bindVertexArray(vao);
+
     // draw 50 random rectangles in random colors
     for (var ii = 0; ii < 50; ++ii) {
       const color = [Math.random(), Math.random(), Math.random()];
@@ -82,7 +79,7 @@ function setupWebGL(evt) {
         new Float32Array(positions),
         gl.STATIC_DRAW
       );
-      gl.uniform4f(colorLocation, ...color, 1);
+      gl.uniform4f(colorUniformLocation, ...color, 1);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6); // primitiveType, offset, count
     }
@@ -101,7 +98,7 @@ function createProgram(gl, vertexSource, fragmentSource) {
   gl.linkProgram(program);
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     gl.deleteProgram(program);
-    console.error(gl.getProgramInfoLog(program));
+    console.error("Error creating a program: " + gl.getProgramInfoLog(program));
     return;
   }
   return program;
@@ -113,7 +110,7 @@ function createShader(gl, type, source) {
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     console.error(
-      "An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader)
+      "Error compiling the shaders: " + gl.getShaderInfoLog(shader)
     );
     gl.deleteShader(shader);
     return null;
