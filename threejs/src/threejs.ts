@@ -1,12 +1,9 @@
 /// <reference path="../node_modules/three/src/three.d.ts" />
 
 type TCandleParts = {
-  candleBodyBuy: THREE.Mesh;
-  candleBodySell: THREE.Mesh;
-  candleWickBuy: THREE.Line;
-  candleWickSell: THREE.Line;
-  candleBodyFlatBuy: THREE.Line;
-  candleBodyFlatSell: THREE.Line;
+  body: { buy: THREE.Mesh; sell: THREE.Mesh };
+  bodyFlat: { buy: THREE.Line; sell: THREE.Line };
+  wick: { buy: THREE.Line; sell: THREE.Line };
 };
 
 type TCandle = {
@@ -437,12 +434,21 @@ scene.add(candlesGroup);
 
 renderer.render(scene, camera);
 
+/////////////////////
 // helper functions
+/////////////////////
 function getCandleParts() {
-  const materialBuy = new THREE.MeshBasicMaterial({ color: 0x22833d });
-  const materialSell = new THREE.MeshBasicMaterial({ color: 0xb82e40 });
-  const materialLineBuy = new THREE.LineBasicMaterial({ color: 0x22833d, linewidth: 2 });
-  const materialLineSell = new THREE.LineBasicMaterial({ color: 0xb82e40, linewidth: 2 });
+  const [buy, sell] = [0x22833d, 0xb82e40];
+  const material = {
+    mesh: {
+      buy: new THREE.MeshBasicMaterial({ color: buy }),
+      sell: new THREE.MeshBasicMaterial({ color: sell }),
+    },
+    line: {
+      buy: new THREE.LineBasicMaterial({ color: buy, linewidth: 2 }),
+      sell: new THREE.LineBasicMaterial({ color: sell, linewidth: 2 }),
+    },
+  };
 
   const makeCandleBody = (() => {
     const shape = new THREE.Shape();
@@ -471,36 +477,28 @@ function getCandleParts() {
     return (material) => new THREE.Line(geometry, material);
   })();
 
-  const candleBodyBuy = makeCandleBody(materialBuy);
-  const candleBodySell = makeCandleBody(materialSell);
-  const candleBodyFlatBuy = makeCandleBodyFlat(materialBuy);
-  const candleBodyFlatSell = makeCandleBodyFlat(materialSell);
-  const candleWickBuy = makeCandleWick(materialLineBuy);
-  const candleWickSell = makeCandleWick(materialLineSell);
-
   return {
-    candleBodyBuy,
-    candleBodySell,
-    candleBodyFlatBuy,
-    candleBodyFlatSell,
-    candleWickBuy,
-    candleWickSell,
+    body: {
+      buy: makeCandleBody(material.mesh.buy),
+      sell: makeCandleBody(material.mesh.sell),
+    },
+    bodyFlat: {
+      buy: makeCandleBodyFlat(material.line.buy),
+      sell: makeCandleBodyFlat(material.line.sell),
+    },
+    wick: {
+      buy: makeCandleWick(material.line.buy),
+      sell: makeCandleWick(material.line.sell),
+    },
   };
 }
 
 function makeCandle(candleParts: TCandleParts, candleData: TCandle, { price, time }) {
-  const {
-    candleBodyBuy,
-    candleBodySell,
-    candleWickBuy,
-    candleWickSell,
-    candleBodyFlatBuy,
-    candleBodyFlatSell,
-  } = candleParts;
+  const { body, bodyFlat, wick } = candleParts;
   const { timestamp, open, high, low, close } = candleData;
-  const candleBody = (open > close ? candleBodySell : candleBodyBuy).clone();
-  const candleBodyFlat = (open > close ? candleBodyFlatSell : candleBodyFlatBuy).clone();
-  const candleWick = (open > close ? candleWickSell : candleWickBuy).clone();
+  const candleBody = (open > close ? body.sell : body.buy).clone();
+  const candleBodyFlat = (open > close ? bodyFlat.sell : bodyFlat.buy).clone();
+  const candleWick = (open > close ? wick.sell : wick.buy).clone();
   const candleGroup = new THREE.Group();
 
   const bodyH = Math.abs(open - close) / (price.max - price.min);
