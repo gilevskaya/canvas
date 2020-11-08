@@ -25,17 +25,17 @@ const OHLC: TCandle[] = [
   },
   {
     timestamp: 10,
+    high: 20,
+    close: 17,
     open: 5,
-    high: 17,
     low: 4,
-    close: 10,
   },
   {
     timestamp: 15,
     high: 18,
     open: 8,
-    close: 5,
-    low: 1,
+    close: 2,
+    low: 0,
   },
   {
     timestamp: 20,
@@ -134,20 +134,29 @@ function makeCandle(
   const candleWick = (open > close ? candleWickSell : candleWickBuy).clone();
 
   const [timeMin, timeMax] = timeRange;
-  const x = (timestamp - timeStep) / (timeMax - timeMin);
   const [priceMin, priceMax] = priceRange;
 
   const bodyH = Math.abs(open - close) / (priceMax - priceMin);
   const wickH = Math.abs(low - high) / (priceMax - priceMin);
+  console.log("bodyH", bodyH);
+
+  const deltaX = (timestamp - timeStep) / (timeMax - timeMin);
+  const iY = 1 / (priceMax - priceMin);
+  const bodyDeltaY = (Math.abs(open - close) / 2 + Math.min(open, close)) * iY;
+  const wickDeltaY = (Math.abs(low - high) / 2 + Math.min(low, high)) * iY;
+
   candleBody.scale.set(1, bodyH, 1);
+  candleBody.translateY(c(bodyDeltaY));
+
   candleWick.scale.set(1, wickH, 1);
-  candleWick.translateX(c(x));
+  candleWick.translateX(c(deltaX));
+  candleWick.translateY(c(wickDeltaY));
 
   const candleGroup = new THREE.Group();
   candleGroup.add(candleBody);
   candlesGroup.add(candleWick);
   candleGroup.scale.set(0.25, 1, 1);
-  candleGroup.position.set(c(x), 0, 0);
+  candleGroup.position.set(c(deltaX), 0, 0);
   return candleGroup;
 }
 
