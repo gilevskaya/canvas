@@ -18,10 +18,10 @@ type TCandle = {
 const OHLC: TCandle[] = [
   {
     timestamp: 5,
-    open: 10,
     high: 15,
-    low: 3,
-    close: 5,
+    open: 12,
+    close: 3,
+    low: 2,
   },
   {
     timestamp: 10,
@@ -32,10 +32,10 @@ const OHLC: TCandle[] = [
   },
   {
     timestamp: 15,
-    open: 10,
-    high: 15,
-    low: 3,
+    high: 18,
+    open: 8,
     close: 5,
+    low: 1,
   },
   {
     timestamp: 20,
@@ -130,21 +130,20 @@ function makeCandle(
 ) {
   const { candleBodyBuy, candleBodySell, candleWickBuy, candleWickSell } = candleParts;
   const { timestamp, open, high, low, close } = candleData;
+  const candleBody = (open > close ? candleBodySell : candleBodyBuy).clone();
+  const candleWick = (open > close ? candleWickSell : candleWickBuy).clone();
+
   const [timeMin, timeMax] = timeRange;
   const x = (timestamp - timeStep) / (timeMax - timeMin);
   const [priceMin, priceMax] = priceRange;
 
-  const candleBody = (open > close ? candleBodySell : candleBodyBuy).clone();
-  const candleWick = (open > close ? candleWickSell : candleWickBuy).clone();
-  console.log("x", x);
-
-  const wickH = Math.abs(low - high) / priceMax - priceMin;
-  candleBody.scale.set(1, 0.5, 1);
-  // candleWick.scale.set(1, wickH * 2, 1);
+  const bodyH = Math.abs(open - close) / (priceMax - priceMin);
+  const wickH = Math.abs(low - high) / (priceMax - priceMin);
+  candleBody.scale.set(1, bodyH, 1);
+  candleWick.scale.set(1, wickH, 1);
   candleWick.translateX(c(x));
 
   const candleGroup = new THREE.Group();
-  console.log("c(x)", c(x));
   candleGroup.add(candleBody);
   candlesGroup.add(candleWick);
   candleGroup.scale.set(0.25, 1, 1);
@@ -159,9 +158,9 @@ function makeGrid(timeRange, timeStep, priceRange, priceStep) {
   const stepY = priceStep / (priceMax - priceMin);
 
   const gridLineMaterial = new THREE.LineBasicMaterial({
-    color: 0x393939,
+    color: 0x252525,
     linewidth: 0.5,
-  }); // 0x1d1d1d | 010101
+  }); // 0x1d1d1d | 010101 | 0x393939
 
   function makeBaseLine(x1: number, y1: number, x2: number, y2: number) {
     const path = new THREE.Path();
